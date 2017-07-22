@@ -10,15 +10,16 @@
 
 <body>
     <div class="container" id="app">
-        <h3 class="text-center">VueNews</h3>
-
-        <div class="columns medium-3" v-for="result in results">
+        <br>
+        <h3 class="text-center">Google News</h3>
+        <hr>
+        <div class="columns medium-3" v-for="result in articles">
             <div class="card">
                 <div class="card-divider">
                     {{ result.title }}
                 </div>
                 <div class="card-section">
-                    <p>{{ result.abstract }}.</p>
+                    <p>{{ result.description }}.</p>
                 </div>
             </div>
         </div>
@@ -26,6 +27,7 @@
     </div>
 
     <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
 
 </body>

@@ -1,11 +1,10 @@
 const vm = new Vue({
   el: '#app',
   data: {
-    results: [
-      {title: "the very first post", abstract: "lorem ipsum some test dimpsum"},
-      {title: "and then there was the second", abstract: "lorem ipsum some test dimsum"},
-      {title: "third time's a charm", abstract: "lorem ipsum some test dimsum"},
-      {title: "four the last time", abstract: "lorem ipsum some test dimsum"}
-    ]
+    articles: []
+  },
+  mounted() {
+    axios.get("https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=e65b548e891e430bbf3b1c5d911a1064")
+    .then(response => {this.articles = response.data.articles})
   }
 });
