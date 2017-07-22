@@ -6,20 +6,44 @@
     <title>The greatest news app ever</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
+    <link rel="stylesheet" href="app.css">
 </head>
 
 <body>
     <div class="container" id="app">
-        <br>
-        <h3 class="text-center">Google News</h3>
-        <hr>
+        <div class="row">
 
-        <news-list :articles="articles">Component</news-list>
+            <br>
+            <h3 class="text-center">New York Times News</h3>
+
+            <section class="callout secondary">
+                <h5 class="text-center">Filter by Category</h5>
+                <form>
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <select v-model="section">
+                        <option v-for="section in sections" :value="section">{{ section }}</option>
+                    </select>
+                        </div>
+                        <div class="medium-6 columns">
+                            <a @click="getPosts(section)" class="button expanded">Retrieve</a>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <h5 class="text-center uppercase" v-if="!loading">{{ title }}</b></h5>
+            <div v-if="loading" class="loader"><img src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="loader"></div>
+
+            <news-list :results="results"></news-list>
+
+        </div>
 
     </div>
 
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="config.js"></script>
     <script src="app.js"></script>
 
 </body>

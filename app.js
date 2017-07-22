@@ -1,13 +1,13 @@
-const GNBaseUrl = "https://newsapi.org/v1/";
-const Popular = "?source=google-news&sortBy=top&apiKey=";
-const ApiKey = "e65b548e891e430bbf3b1c5d911a1064";
+const NYBaseUrl = "https://api.nytimes.com/svc/topstories/v2/";
+const ApiKey = config.KEY;
+const SECTIONS = "home, arts, automobiles, books, business, fashion, food, health, insider, magazine, movies, national, nyregion, obituaries, opinion, politics, realestate, science, sports, sundayreview, technology, theater, tmagazine, travel, upshot, world"; // From NYTimes
 
 function buildUrl(url) {
-    return GNBaseUrl + url + Popular + ApiKey
+    return NYBaseUrl + url + ".json?api-key=" + ApiKey
 }
 
 Vue.component('news-list', {
-    props: ['articles'],
+    props: ['results'],
     template: `
     <section>
       <div class="row" v-for="posts in processedPosts">
@@ -16,9 +16,11 @@ Vue.component('news-list', {
           <div class="card-divider">
           {{ post.title }}
           </div>
-          <a :href="post.url" target="_blank"><img :src="post.urlToImage"></a>
+          <a :href="post.url" target="_blank"><img :src="post.image_url"></a>
           <div class="card-section">
-            <p>{{ post.description }}</p>
+            <p>{{ post.abstract }}</p>
+            <span class="label success">{{ post.section }}</span>
+            <a :href="post.url" target="_blank"><small>read more...</small></a>
           </div>
         </div>
         </div>
@@ -27,13 +29,13 @@ Vue.component('news-list', {
   `,
     computed: {
         processedPosts() {
-            let posts = this.articles;
+            let posts = this.results;
 
             // Add image_url attribute
-            //   posts.map(post => {
-            //     let imgObj = post.multimedia.find(media => media.format === "superJumbo");
-            //     post.image_url = imgObj ? imgObj.url : "http://placehold.it/300x200?text=N/A";
-            //   });
+              posts.map(post => {
+                let imgObj = post.multimedia.find(media => media.format === "superJumbo");
+                post.image_url = imgObj ? imgObj.url : "http://placehold.it/300x200?text=N/A";
+              });
 
             // Put Array into Chunks
             let i, j, chunkedArray = [],
@@ -49,16 +51,23 @@ Vue.component('news-list', {
 const vm = new Vue({
     el: '#app',
     data: {
-        articles: []
+        results: [],
+        sections: SECTIONS.split(', '), // create an array of the sections
+        section: 'home', // set default section to 'home'
+        loading: true,
+        title: ''
     },
     mounted() {
-        this.getPosts('articles');
+        this.getPosts(this.section);
     },
     methods: {
         getPosts(section) {
             let url = buildUrl(section);
             axios.get(url).then((response) => {
-                this.articles = response.data.articles;
+                this.loading = false;
+                this.results = response.data.results;
+                let title = this.section !== 'home' ? "Top stories in '" + this.section + "' today" : "Top stories today";
+                this.title = title + "(" + response.data.num_results + ")";
             }).catch(error => {
                 console.log(error);
             });
