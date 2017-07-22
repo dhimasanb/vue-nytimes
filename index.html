@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>The greatest news app ever</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="container" id="app">
-      <h3 class="text-center">VueNews</h3> 
+        <h3 class="text-center">VueNews</h3>
+    </div>
+
+    <div class="columns medium-3" v-for="result in results">
+        <div class="card">
+            <div class="card-divider">
+                {{ result.title }}
+            </div>
+            <div class="card-section">
+                <p>{{ result.abstract }}.</p>
+            </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/vue"></script>
     <script src="app.js"></script>
 
-  </body>
+</body>
+
 </html>
