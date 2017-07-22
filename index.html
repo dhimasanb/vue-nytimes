@@ -13,13 +13,17 @@
         <br>
         <h3 class="text-center">Google News</h3>
         <hr>
-        <div class="columns medium-3" v-for="result in articles">
-            <div class="card">
-                <div class="card-divider">
-                    {{ result.title }}
-                </div>
-                <div class="card-section">
-                    <p>{{ result.description }}.</p>
+
+        <div class="row" v-for="posts in processedPosts">
+            <div class="columns large-3 medium-6" v-for="post in posts">
+                <div class="card">
+                    <div class="card-divider">
+                        {{ post.title }}
+                    </div>
+                    <a :href="post.url" target="_blank"><img :src="post.urlToImage"></a>
+                    <div class="card-section">
+                        <p>{{ post.description }}</p>
+                    </div>
                 </div>
             </div>
         </div>
