@@ -6,24 +6,25 @@ function buildUrl(url) {
     return GNBaseUrl + url + Popular + ApiKey
 }
 
-const vm = new Vue({
-    el: '#app',
-    data: {
-        articles: []
-    },
-    mounted() {
-        this.getPosts('articles');
-    },
-    methods: {
-        getPosts(section) {
-            let url = buildUrl(section);
-            axios.get(url).then((response) => {
-                this.articles = response.data.articles;
-            }).catch(error => {
-                console.log(error);
-            });
-        }
-    },
+Vue.component('news-list', {
+    props: ['articles'],
+    template: `
+    <section>
+      <div class="row" v-for="posts in processedPosts">
+        <div class="columns large-3 medium-6" v-for="post in posts">
+          <div class="card">
+          <div class="card-divider">
+          {{ post.title }}
+          </div>
+          <a :href="post.url" target="_blank"><img :src="post.urlToImage"></a>
+          <div class="card-section">
+            <p>{{ post.description }}</p>
+          </div>
+        </div>
+        </div>
+      </div>
+  </section>
+  `,
     computed: {
         processedPosts() {
             let posts = this.articles;
@@ -43,4 +44,24 @@ const vm = new Vue({
             return chunkedArray;
         }
     }
+});
+
+const vm = new Vue({
+    el: '#app',
+    data: {
+        articles: []
+    },
+    mounted() {
+        this.getPosts('articles');
+    },
+    methods: {
+        getPosts(section) {
+            let url = buildUrl(section);
+            axios.get(url).then((response) => {
+                this.articles = response.data.articles;
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+    },
 });
